@@ -1,0 +1,15 @@
+name: My Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: say_hello_world
+        run: echo "hello world"
+        shell: bash
