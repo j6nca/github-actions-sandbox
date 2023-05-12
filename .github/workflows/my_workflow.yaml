@@ -23,13 +23,13 @@ jobs:
         with:
           name: my-artifact
           path: test.txt
+          retention-days: 1
   pull_artifact:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@master
         with:
           name: my-artifact
-          path: test.txt
       - name: print file
         run: cat test.txt
         shell: bash
