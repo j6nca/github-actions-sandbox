@@ -13,3 +13,20 @@ jobs:
       - name: say_hello_world
         run: echo "hello world"
         shell: bash
+  push_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: write to file
+        run: echo "hello world" >> test.txt
+        shell: bash
+      - uses: actions/upload-artifact@master
+        with:
+          name: my-artifact
+          path: test.txt
+  pull_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: my-artifact
+          path: path/to/artifact
