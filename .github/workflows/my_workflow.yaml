@@ -1,9 +1,8 @@
-name: pull request target
+name: pull request closed
 
 on:
-  pull_request_target:
-    types:
-      - closed
+  pull_request:
+    types: [closed]
 
 jobs:
   if_merged:
