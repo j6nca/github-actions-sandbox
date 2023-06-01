@@ -1,2 +1,2 @@
 image:
-  tag: 'abc123'
+  tag: 'jonatha'
