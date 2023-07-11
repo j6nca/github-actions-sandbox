@@ -1,4 +1,5 @@
-name: on_push
+name: blabla
+
 on:
   push:
 
@@ -13,3 +14,10 @@ jobs:
     - name: Check quotes
       run: echo "no quotes"
       if: github.ref_name == '${{ github.event.repository.default_branch }}'
+
+    - name: Trigger Repository Dispatch
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        repository: j6nca/github-actions-sandbox
+        event-type: testing
+        client-payload: '{"version": "blablabla"}'
