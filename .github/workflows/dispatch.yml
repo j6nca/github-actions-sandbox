@@ -3,7 +3,7 @@ on:
     types: [testing]
 
 name: dispatch name
-run-name: dispatch run name ${{ github.event.client_payload.versions }}
+run-name: dispatch run name ${{ github.event.client_payload.version }}
 
 jobs:
   dispatch_job:
