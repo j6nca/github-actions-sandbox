@@ -18,5 +18,7 @@ jobs:
     - name: Trigger Repository Dispatch
       uses: peter-evans/repository-dispatch@v2
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: j6nca/github-actions-sandbox
         event-type: testing
         client-payload: '{"version": "blablabla"}'
