@@ -1,0 +1,79 @@
+name: Monorepo merge workflow
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  DEFAULT_VERSION: githubtesting
+  NX_BRANCH: origin/main
+  NX_HEAD: origin/main
+  NX_BASE: origin/main~1
+  SERVICES: "ideas-api public-api"
+  SERVICE_TRUE: "ideas-api"
+  SERVICE_FALSE: "nope-service"
+
+jobs:
+  testsss:
+    name: 🐙 Release Affected Services
+    runs-on:
+      labels: ubuntu-latest
+    steps:
+      - name: dummy if check
+        run: echo "${{contains('wellwellwell', 'nope')}}"
+
+      - name: debug if check false
+        run: |
+          echo "${{env.SERVICES}} and 'test'"
+          echo "${{contains(env.SERVICES, 'test')}}"
+
+      - name: debug if check true
+        run: |
+          echo "${{env.SERVICES}} and 'ideas-api'"
+          echo "${{contains(env.SERVICES, 'ideas-api')}}"
+
+      - name: debug if check
+        run: |
+          echo "${{env.SERVICES}} and ${{matrix.service}}"
+          echo "${{contains(env.SERVICES, matrix.service)}}"
+
+      - name: conditional step check true
+        if: contains(${{ env.SERVICES }}, '${{ env.SERVICE_TRUE }}')
+        run: |
+          echo "${{env.SERVICES}} and ${{ env.SERVICE_TRUE }}"
+
+      - name: conditional step check false
+        if: ${{contains( env.SERVICES, env.SERVICE_FALSE)}}
+        run: |
+          echo "${{env.SERVICES}} and ${{ env.SERVICE_FALSE }}"
+  nx_matrix:
+    name: 🐙 Release Affected Services
+    runs-on:
+      labels: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          # Once we start migrating over services, we just have to define them here
+          # - service: auth-api
+          #   event_type: auth_api
+          # - service: auth-ui
+          #   event_type: auth_ui
+          # - service: feedback-portal
+          #   event_type: feedback_portal
+          # - service: fim
+          #   event_type: fim
+          - service: public-api
+          - service: ideas-api
+          - service: nope-service
+          # - service: roadmapping
+          #   event_type: roadmapping
+
+    # A potential problem I forsee with this is if we release multiple services at once, there is race condition in rm-helm-charts for which workflows will succeed, though this may be a change for that repo
+    steps:
+      - name: 🚀 Trigger Dispatch for ${{matrix.service}} Service
+        if: contains(${{ env.SERVICES }}, '${{matrix.service}}')
+        run: echo "hello world ${{matrix.service}}"
