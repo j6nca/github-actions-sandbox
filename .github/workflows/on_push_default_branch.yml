@@ -1,8 +1,33 @@
 name: blabla
-run-name: Release ${{ env.SERVICE }} (${{ env.VERSION }}) to ${{ env.ENV }}
+run-name: Release ${{ inputs.service || github.event.client_payload.service }} (${{ inputs.version || github.event.client_payload.version }}) to ${{ inputs.environment || github.event.client_payload.environment }}
 
 on:
-  push:
+  repository_dispatch:
+    types: [release]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+        - stage
+        - prod
+      service:
+        description: 'Service to release'
+        required: true
+        type: choice
+        options:
+        - auth-api
+        - auth-ui
+        - feedback-portal
+        - fim
+        - ideas-api
+        - public-api
+      version:
+        description: 'Service version to release'
+        required: true
+        type: string
 
 jobs:
   on_push:
