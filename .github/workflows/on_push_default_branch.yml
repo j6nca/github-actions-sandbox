@@ -1,4 +1,5 @@
 name: blabla
+run-name: Release ${{ env.SERVICE }} (${{ env.VERSION }}) to ${{ env.ENV }}
 
 on:
   push:
@@ -22,3 +23,9 @@ jobs:
         repository: j6nca/github-actions-sandbox
         event-type: testing
         client-payload: '{"version": "blablabla"}'
+
+    - name: Set env variables
+      run: |
+        echo "ENV=TEST_ENVIRONMENT" >> $GITHUB_ENV
+        echo "SERVICE=TEST_SERVICE" >> $GITHUB_ENV
+        echo "VERSION=TEST_VERSION" >> $GITHUB_ENV
