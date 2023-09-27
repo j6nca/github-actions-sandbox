@@ -1,0 +1,56 @@
+name: On push output workflow
+
+on:
+  push:
+
+jobs:
+
+  build-publish:
+    name: 🌊 nx
+    runs-on:
+      labels: ubuntu-latest
+    outputs:
+      nx_affected: ${{ steps.nx_affected.outputs.nx_affected }}
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute short SHA
+        id: vars
+        run: echo "version=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: 🔍 Get Affected Projects
+        id: nx_affected
+        run: |
+          echo "nx_affected<<EOF" >> $GITHUB_OUTPUT
+          echo "service-a\nservice-b\n" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: List Affected Projects
+        run: echo "Affected services - ${{ steps.nx_affected.outputs.nx_affected }}"
+
+  nx_matrix:
+    needs: [build-publish]
+    name: 🐙 Release Affected Services
+    runs-on:
+      labels: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - service: service-a
+          - service: service-b
+          - service: service-c
+
+    steps:
+      - name: Print Output Service
+        if: ${{ contains(needs.build-publish.outputs.nx_affected, matrix.service) }}
+        run: | 
+            echo "output: ${{ needs.build-publish.outputs.nx_affected }}"
+            echo "evaluation: ${{ contains(needs.build-publish.outputs.nx_affected, matrix.service) }}"
+      - name: 🚀 Trigger Dispatch for ${{ matrix.service }} Service
+        if: ${{ contains(needs.build-publish.outputs.nx_affected, matrix.service) }}
+        run: echo "${{ matrix.service }}"

@@ -1,13 +1,13 @@
-on:
-  repository_dispatch:
-    types: [testing]
+# on:
+#   repository_dispatch:
+#     types: [testing]
 
-name: dispatch name
-run-name: dispatch run name ${{ github.event.client_payload.version }}
+# name: dispatch name
+# run-name: dispatch run name ${{ github.event.client_payload.version }}
 
-jobs:
-  dispatch_job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: debug
-        run: echo "i was here"
+# jobs:
+#   dispatch_job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: debug
+#         run: echo "i was here"
