@@ -19,6 +19,7 @@ on:
         required: true
         type: choice
         options:
+        - github-actions-sandbox
         - auth-api
         - auth-ui
         - feedback-portal
