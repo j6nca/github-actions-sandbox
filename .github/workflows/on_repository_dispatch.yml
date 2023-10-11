@@ -1,0 +1,103 @@
+# Sample release workflow
+name: on_repository_dispatch
+run-name: Release ${{ inputs.service || github.event.client_payload.service }} (${{ inputs.version || github.event.client_payload.version }}) to ${{ inputs.environment || github.event.client_payload.environment }}
+
+on:
+  repository_dispatch:
+    types: [release]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+        - stage
+        - prod
+      service:
+        description: 'Service to release'
+        required: true
+        type: choice
+        options:
+        - auth-api
+        - auth-ui
+        - feedback-portal
+        - fim
+        - ideas-api
+        - public-api
+      version:
+        description: 'Service version to release'
+        required: true
+        type: string
+
+jobs:
+  on_push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check no quotes
+      run: echo "no quotes"
+      if: github.ref_name == ${{ github.event.repository.default_branch }}
+
+    - name: Check quotes
+      run: echo "no quotes"
+      if: github.ref_name == '${{ github.event.repository.default_branch }}'
+
+    - name: Set variables if workflow_dispatch
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "ENV=${{ inputs.environment }}" >> $GITHUB_ENV
+          echo "SERVICE=${{ inputs.service }}" >> $GITHUB_ENV
+          echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+
+    - name: Set variables if repository_dispatch
+      if: github.event_name == 'repository_dispatch'
+      run: |
+        echo "ENV=${{ github.event.client_payload.environment }}" >> $GITHUB_ENV
+        echo "SERVICE=${{ github.event.client_payload.service }}" >> $GITHUB_ENV
+        echo "VERSION=${{ github.event.client_payload.version }}" >> $GITHUB_ENV
+
+  notification:
+    needs: [on_push]
+    name: ✉️ Send Slack Notification
+    runs-on:
+      labels: ubuntu-latest
+
+    steps:
+      - name: Print Output Service
+        run: | 
+          echo "Sending slack notification"
+
+          if [ "${{ env.SERVICE }}" == "ideas-api" ] || [ "${{ env.SERVICE }}" == "public-api" ] || [ "${{ env.SERVICE }}" == "graphql-gateway" ]; then
+            GITHUB_PROJECT="roadmunk"
+          else
+            GITHUB_PROJECT="${{ env.SERVICE }}"
+          fi
+
+          PR_INFO=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.ACTIONS_SANDBOX_PAT }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/tempo-io/$GITHUB_PROJECT/commits/$VERSION/pulls)
+
+          AUTHOR=$(echo $PR_INFO | jq -r '.[].user.login')
+          AUTHOR_URL=$(echo $PR_INFO | jq -r '.[].user.html_url')
+          PR_TITLE=$(echo $PR_INFO | jq -r '.[].title')
+          PR_BRANCH=$(echo $PR_INFO | jq -r '.[].head.ref')
+          PR_URL=$(echo $PR_INFO | jq -r '.[].html_url')
+          RELEASE=$VERSION
+
+          echo "AUTHOR $AUTHOR"
+          echo "AUTHOR_URL $AUTHOR_URL"
+          echo "PR_TITLE $PR_TITLE"
+          echo "PR_BRANCH $PR_BRANCH"
+          echo "PR_URL $PR_URL"
+          echo "RELEASE $RELEASE"
+
+          AUTHOR_INFO=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.ACTIONS_SANDBOX_PAT }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/users/$AUTHOR)
+          AUTHOR_NAME=$(echo $AUTHOR_INFO | jq -r '.name')
+
+          if [ "$AUTHOR_NAME" == "null" ]; then
+            echo "Couldn't find name, falling back on username"
+            AUTHOR_REF=$AUTHOR
+          else
+            AUTHOR_REF=$AUTHOR_NAME
+          fi
+
+          SLACK_MESSAGE=":party_k8s: New version of \`{{ default .Values.info.name .Values.info.group }}\` synced to stage:\n>>>Description: <$PR_URL|$PR_TITLE>\nAuthor: <$AUTHOR_URL|$AUTHOR_REF>\nBranch: \`$PR_BRANCH\`\nVersion: \`$RELEASE\`"
+          curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${SLACK_MESSAGE}\"}" ${{ secrets.SLACK_WEBHOOK }}
