@@ -94,7 +94,7 @@ jobs:
           AUTHOR_REF=$AUTHOR_NAME
         fi
 
-        SLACK_MESSAGE=":party_k8s: New version of \`{{ default .Values.info.name .Values.info.group }}\` synced to stage:\n>>>Description: <$PR_URL|$PR_TITLE>\nAuthor: <$AUTHOR_URL|$AUTHOR_REF>\nBranch: \`$PR_BRANCH\`\nVersion: \`$RELEASE\`"
+        SLACK_MESSAGE=":party_k8s: New version of \`${{ env.SERVICE }}\` synced to stage:\n>>>Description: <$PR_URL|$PR_TITLE>\nAuthor: <$AUTHOR_URL|$AUTHOR_REF>\nBranch: \`$PR_BRANCH\`\nVersion: \`$RELEASE\`"
         curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${SLACK_MESSAGE}\"}" ${{ secrets.SLACK_WEBHOOK }}
     
     - name: ⛔ Send Slack Failure Notification
