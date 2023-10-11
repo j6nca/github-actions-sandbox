@@ -100,5 +100,5 @@ jobs:
       if: failure()
       run: | 
           echo "Sending slack notification"
-          SLACK_MESSAGE="There was an issue rolling out release, @delivery please investigate"
+          SLACK_MESSAGE="There was an issue rolling out release, @Jonathan please investigate"
           curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${SLACK_MESSAGE}\"}" ${{ secrets.SLACK_WEBHOOK }}
