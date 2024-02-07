@@ -6,6 +6,9 @@ on:
   repository_dispatch:
     types: [release]
   workflow_dispatch:
+  push:
+  pull_request:
+
 
 jobs:
   on_push:
