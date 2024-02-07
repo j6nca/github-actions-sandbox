@@ -35,6 +35,12 @@ jobs:
   on_push:
     runs-on: ubuntu-latest
     steps:
+    - name: Dump github context
+      run:   echo "$GITHUB_CONTEXT"
+      shell: bash
+      env:
+      GITHUB_CONTEXT: ${{ toJson(github) }}
+
     - name: Check no quotes
       run: echo "no quotes"
       if: github.ref_name == ${{ github.event.repository.default_branch }}
