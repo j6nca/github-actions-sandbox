@@ -1,0 +1,21 @@
+# Sample release workflow
+name: on_repository_dispatch
+run-name: Release ${{ inputs.service || github.event.client_payload.service }} (${{ inputs.version || github.event.client_payload.version }}) to ${{ inputs.environment || github.event.client_payload.environment }}
+
+on:
+  repository_dispatch:
+    types: [release]
+  workflow_dispatch:
+  push:
+  pull_request:
+
+
+jobs:
+  on_push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dump github context
+      run:   echo "$GITHUB_CONTEXT"
+      shell: bash
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
