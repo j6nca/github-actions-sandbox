@@ -18,12 +18,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Dump github context
-        run:   echo "$GITHUB_CONTEXT"
-        shell: bash
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-
       - name: Compute short SHA
         id: vars
         run: echo "version=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
