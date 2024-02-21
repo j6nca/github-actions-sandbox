@@ -25,21 +25,21 @@ jobs:
         sleep $(( $NUM_RUNNING * 15 ))
 
     - name: Commit & push version changes
-        id: commit-file
-        shell: bash
-        if: env.SKIP_COMMIT == 'false'
-        run: |
-          git pull --rebase --autostash
-          git config --global user.email "actions@github.com"
-          git config --global user.name "Github Actions"
-          echo "input: '${{ inputs.num }}'" >> staggered.yaml
-          git add staggered.yaml
-          git commit -m "Staggered #${{ inputs.num }}"
-          git push
+      id: commit-file
+      shell: bash
+      if: env.SKIP_COMMIT == 'false'
+      run: |
+        git pull --rebase --autostash
+        git config --global user.email "actions@github.com"
+        git config --global user.name "Github Actions"
+        echo "input: '${{ inputs.num }}'" >> staggered.yaml
+        git add staggered.yaml
+        git commit -m "Staggered #${{ inputs.num }}"
+        git push
     
     - name: ⛔ Send Slack Failure Notification
       if: failure()
       run: | 
-          echo "Sending slack notification"
-          SLACK_MESSAGE="There was an issue rolling out \`${{ env.SERVICE }}\` release \`${{ env.SHORT_SHA }}\`, please investigate"
-          curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${SLACK_MESSAGE}\"}" ${{ secrets.SLACK_WEBHOOK }}
+        echo "Sending slack notification"
+        SLACK_MESSAGE="There was an issue rolling out \`${{ env.SERVICE }}\` release \`${{ env.SHORT_SHA }}\`, please investigate"
+        curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${SLACK_MESSAGE}\"}" ${{ secrets.SLACK_WEBHOOK }}
