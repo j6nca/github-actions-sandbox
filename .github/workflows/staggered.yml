@@ -1,6 +1,6 @@
 # Sample release workflow
 name: staggered
-run-name: Staggered run \#${{ inputs.service }}
+run-name: Staggered run \#${{ inputs.num }}
 
 on:
   workflow_dispatch:
@@ -35,10 +35,3 @@ jobs:
         git add staggered.yaml
         git commit -m "Staggered #${{ inputs.num }}"
         git push
-    
-    - name: ⛔ Send Slack Failure Notification
-      if: failure()
-      run: | 
-        echo "Sending slack notification"
-        SLACK_MESSAGE="There was an issue rolling out \`${{ env.SERVICE }}\` release \`${{ env.SHORT_SHA }}\`, please investigate"
-        curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${SLACK_MESSAGE}\"}" ${{ secrets.SLACK_WEBHOOK }}
