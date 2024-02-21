@@ -15,6 +15,11 @@ jobs:
   on_push:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        token: ${{ github.token }}
+        fetch-depth: 0
 
     - name: Get num running workflows and delay
       run: |
