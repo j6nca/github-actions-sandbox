@@ -11,6 +11,8 @@ on:
         type: string
         default: 'default'
 
+permissions: write-all
+
 jobs:
   on_push:
     runs-on: ubuntu-latest
