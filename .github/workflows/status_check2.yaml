@@ -22,6 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: Checkout
-        run: echo "done"
+      - name: Fail job
+        run: exit 1
 
