@@ -18,7 +18,7 @@ jobs:
 
   status_check:
     needs:
-      - steps
+      - run
     runs-on: ubuntu-latest
     if: always()
     steps:
