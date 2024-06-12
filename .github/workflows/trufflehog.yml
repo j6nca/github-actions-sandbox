@@ -1,0 +1,10 @@
+name: trufflehog scan
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+
+jobs:
+  call-workflow-passing-data:
+    uses: j6nca/actions/.github/workflows/scan-trufflehog.yml@main
