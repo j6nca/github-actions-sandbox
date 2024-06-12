@@ -7,4 +7,4 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: j6nca/actions/.github/workflows/scan-trufflehog.yml@main
+    uses: j6nca/actions/.github/workflows/scan-trufflehog.yaml@main
