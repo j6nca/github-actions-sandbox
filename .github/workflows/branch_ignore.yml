@@ -26,7 +26,7 @@ jobs:
   other-job:
     needs: [setup]
     runs-on: ubuntu-latest
-    if: ${{ needs.setup.outputs.skip }} == 'false'
+    if: ${{ needs.setup.outputs.skip }} === 'false'
     steps:
       - name: run if not ignored
         run: |
