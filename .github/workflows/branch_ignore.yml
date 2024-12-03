@@ -11,9 +11,9 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      condition: ${{ steps.condition.outputs.condition }}
+      skip: ${{ steps.skip.outputs.skip }}
     steps:
-      - id: condition
+      - id: skip
         run: |
           if [[ ${{ github.head_ref }} == *"ignore"* ]]; then
             echo "skip=true" >> $GITHUB_OUTPUT
