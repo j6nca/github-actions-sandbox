@@ -1,12 +1,15 @@
 on:
   pull_request:
-    branches-ignore:
-      - 'ignore/**'
+    # Don't try this, it doesnt work lol, it looks at the target branch to match regex
+    # More info: https://github.com/orgs/community/discussions/26795#discussioncomment-3253430
+    # branches-ignore:
+    #   - "ignore/**"
 
 name: Test branch ignore
 
 jobs:
   build:
+  if: github.ref == 'ignore/**'
     runs-on: ubuntu-latest
 
     name: Test ignore step
@@ -14,4 +17,3 @@ jobs:
       - name: echo
         run: |
           echo "helloworld"
-          echo "helloagain"
