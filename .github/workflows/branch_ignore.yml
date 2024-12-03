@@ -8,17 +8,20 @@ on:
 name: Test branch ignore
 
 jobs:
-  build:
-    if: ${{! contains( github.ref, 'ignore/' )}}
+  setup:
     runs-on: ubuntu-latest
-
-    name: Test ignore step
+    outputs:
+      condition: ${{ steps.condition.outputs.condition }}
     steps:
-      - name: echo
+      - id: condition
         run: |
-<<<<<<< Updated upstream
-          echo "helloworld"
-=======
-          echo "helloworld ignore/test-run"
-          echo ${{ github.ref }}
->>>>>>> Stashed changes
+          if [[ ${{ github.head_ref }} == *"ignore"* ]]; then
+            echo "condition=true" >> $GITHUB_OUTPUT
+          else
+            echo "condition=false" >> $GITHUB_OUTPUT  
+          fi
+
+  other-job:
+    needs: [setup]
+    runs-on: ubuntu-latest
+    if: ${{ needs.setup.outputs.condition }} == 'true'
