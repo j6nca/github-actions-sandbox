@@ -9,7 +9,7 @@ name: Test branch ignore
 
 jobs:
   build:
-    if: github.ref == 'ignore/**'
+    if: github.ref != 'ignore/**'
     runs-on: ubuntu-latest
 
     name: Test ignore step
