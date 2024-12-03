@@ -1,0 +1,16 @@
+on:
+  pull_request:
+    branches-ignore:
+      - "ignore/**"
+
+name: Test branch ignore
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    name: Test ignore step
+    steps:
+      - name: echo
+        run: |
+          echo "helloworld"
