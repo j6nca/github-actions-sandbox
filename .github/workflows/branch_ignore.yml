@@ -25,3 +25,7 @@ jobs:
     needs: [setup]
     runs-on: ubuntu-latest
     if: ${{ needs.setup.outputs.condition }} == 'true'
+    steps:
+      - name: run if not ignored
+        run: |
+          echo "hello world"
