@@ -1,7 +1,7 @@
 on:
   pull_request:
     branches-ignore:
-      - 'ignore/**'
+      - "ignore/**"
 
 name: Test branch ignore
 
@@ -14,4 +14,3 @@ jobs:
       - name: echo
         run: |
           echo "helloworld"
-          echo "helloagain"
