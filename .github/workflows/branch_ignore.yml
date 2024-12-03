@@ -16,15 +16,15 @@ jobs:
       - id: condition
         run: |
           if [[ ${{ github.head_ref }} == *"ignore"* ]]; then
-            echo "condition=true" >> $GITHUB_OUTPUT
+            echo "skip=true" >> $GITHUB_OUTPUT
           else
-            echo "condition=false" >> $GITHUB_OUTPUT  
+            echo "skip=false" >> $GITHUB_OUTPUT  
           fi
 
   other-job:
     needs: [setup]
     runs-on: ubuntu-latest
-    if: ${{ needs.setup.outputs.condition }} == 'true'
+    if: ${{ needs.setup.outputs.skip }} == 'false'
     steps:
       - name: run if not ignored
         run: |
