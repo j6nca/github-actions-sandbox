@@ -22,7 +22,6 @@ jobs:
             echo "continue=true" >> $GITHUB_OUTPUT
             echo "not skipping ${{ github.head_ref }}"
           fi
-
   other-job:
     needs: [setup]
     runs-on: ubuntu-latest
