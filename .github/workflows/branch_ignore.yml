@@ -17,8 +17,10 @@ jobs:
         run: |
           if [[ ${{ github.head_ref }} == *"ignore"* ]]; then
             echo "skip=true" >> $GITHUB_OUTPUT
+            echo "skipping ${{ github.head_ref }}"
           else
-            echo "skip=false" >> $GITHUB_OUTPUT  
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "not skipping ${{ github.head_ref }}"
           fi
 
   other-job:
