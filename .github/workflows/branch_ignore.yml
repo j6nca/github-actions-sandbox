@@ -26,7 +26,7 @@ jobs:
   other-job:
     needs: [setup]
     runs-on: ubuntu-latest
-    if: ${{ needs.setup.outputs.continue }}
+    if: ${{ needs.setup.outputs.continue }} == "true"
     steps:
       - name: run if not ignored
         run: |
