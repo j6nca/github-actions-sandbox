@@ -16,4 +16,9 @@ jobs:
     steps:
       - name: echo
         run: |
+<<<<<<< Updated upstream
           echo "helloworld"
+=======
+          echo "helloworld ignore/test-run"
+          echo ${{ github.ref }}
+>>>>>>> Stashed changes
