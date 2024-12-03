@@ -34,7 +34,7 @@ jobs:
 
   contains:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.head_ref, "ignore") }}
+    if: ${{ !contains( github.head_ref, 'ignore' ) }}
     steps:
       - name: run if not ignored \#2
         run: |
