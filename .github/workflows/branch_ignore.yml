@@ -11,23 +11,23 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      skip: ${{ steps.skip.outputs.skip }}
+      continue: ${{ steps.check_branch.outputs.continue }}
     steps:
-      - id: skip
+      - id: check_branch
         run: |
           if [[ ${{ github.head_ref }} == *"ignore"* ]]; then
-            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "continue=false" >> $GITHUB_OUTPUT
             echo "skipping ${{ github.head_ref }}"
           else
-            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "continue=true" >> $GITHUB_OUTPUT
             echo "not skipping ${{ github.head_ref }}"
           fi
 
   other-job:
     needs: [setup]
     runs-on: ubuntu-latest
-    if: ${{ needs.setup.outputs.skip }} === 'false'
+    if: ${{ needs.setup.outputs.continue }}
     steps:
       - name: run if not ignored
         run: |
-          echo "hello world ${{ needs.setup.outputs.skip }}"
+          echo "hello world ${{ needs.setup.outputs.continue }}"
