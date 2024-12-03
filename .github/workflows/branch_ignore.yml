@@ -30,4 +30,4 @@ jobs:
     steps:
       - name: run if not ignored
         run: |
-          echo "hello world"
+          echo "hello world ${{ needs.setup.outputs.skip }}"
