@@ -1,6 +1,7 @@
 on:
   pull_request:
     # Don't try this, it doesnt work lol, it looks at the target branch to match regex
+    # More info: https://github.com/orgs/community/discussions/26795#discussioncomment-3253430
     # branches-ignore:
     #   - "ignore/**"
 
