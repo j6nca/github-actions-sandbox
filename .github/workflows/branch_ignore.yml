@@ -8,30 +8,6 @@ on:
 name: Test branch ignore
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      continue: ${{ steps.check_branch.outputs.continue }}
-    steps:
-      - id: check_branch
-        run: |
-          if [[ ${{ github.head_ref }} == *"ignore"* ]]; then
-            echo "continue=false" >> $GITHUB_OUTPUT
-            echo "skipping ${{ github.head_ref }}"
-          else
-            echo "continue=true" >> $GITHUB_OUTPUT
-            echo "not skipping ${{ github.head_ref }}"
-          fi
-
-  other-job:
-    needs: [setup]
-    runs-on: ubuntu-latest
-    if: ${{ needs.setup.outputs.continue }} == "true"
-    steps:
-      - name: run if not ignored
-        run: |
-          echo "hello world ${{ needs.setup.outputs.continue }}"
-
   contains:
     runs-on: ubuntu-latest
     if: ${{ !contains( github.head_ref, 'ignore' ) }}
