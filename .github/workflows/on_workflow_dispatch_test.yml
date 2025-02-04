@@ -1,0 +1,16 @@
+# Sample release workflow
+name: on_workflow_dispatch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: echo file
+      run: |
+        cat README.md
