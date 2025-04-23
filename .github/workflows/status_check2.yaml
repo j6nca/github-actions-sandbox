@@ -2,6 +2,7 @@ name: Status Check 2
 on:
   pull_request:
 
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
@@ -13,14 +14,16 @@ jobs:
     steps:
       - name: Checkout
         run: echo "done"
+      - name: Fail job
+        run: exit 1
 
 
   status_check:
     needs:
-      - steps
+      - run
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: Checkout
+      - name: Done
         run: echo "done"
 
