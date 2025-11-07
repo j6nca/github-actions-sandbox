@@ -16,6 +16,6 @@ jobs:
       - name: Git diff
         run: |
           git branch
-          # git log
+          echo "GITHUB_REF: $GITHUB_REF"
           # Get file names (excluding deleted files)
           git diff origin/${{ github.event.repository.default_branch }}...HEAD --name-only --diff-filter=ACMR ./prometheus/alerts/**/*.yml
