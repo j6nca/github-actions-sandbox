@@ -16,5 +16,5 @@ jobs:
       - name: Git diff
         run: |
           git branch
-          git log
+          # git log
           git diff origin/${{ github.default_branch }}...HEAD
