@@ -16,4 +16,5 @@ jobs:
       - name: Git diff
         run: |
           git branch
+          git log
           git diff main
