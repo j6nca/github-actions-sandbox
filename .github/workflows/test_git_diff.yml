@@ -18,4 +18,4 @@ jobs:
           git branch
           # git log
           # Get file names (excluding deleted files)
-          git diff origin/${{ github.event.repository.default_branch }}...HEAD --name-only --diff-filter=ACMRTUXB prometheus/alerts/**/*.yml
+          git diff origin/${{ github.event.repository.default_branch }}...HEAD --name-only --diff-filter=ACMRTUXB ./prometheus/alerts/**/*.yml
