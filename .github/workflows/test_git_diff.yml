@@ -2,7 +2,7 @@ name: Git Diff Test
 on:
   pull_request:
     branches:
-      - jonathann/*
+      - main
 
 jobs:
   run:
@@ -19,3 +19,18 @@ jobs:
           echo "GITHUB_REF: $GITHUB_REF"
           # Get file names (excluding deleted files)
           git diff origin/${{ github.event.repository.default_branch }}...HEAD --name-only --diff-filter=ACMR ./prometheus/alerts/**/*.yml
+          echo ">>> PULL_REQUEST_TARGET_REPO: ${PULL_REQUEST_TARGET_REPO}"
+          echo ">>> PULL_REQUEST_SOURCE_REPO: ${PULL_REQUEST_SOURCE_REPO}"
+
+      - name: Pint stuff
+        run: |
+          # pull request is not from fork
+          echo ">>> Running steps for PR from trunk (not fork)"
+          BASEBRANCH="$GITHUB_BASE_REF"
+          PRBRANCH="$GITHUB_HEAD_REF"
+          echo ">>> BASE BRANCH: $BASEBRANCH"
+          echo ">>> PR BRANCH: $PRBRANCH"
+          git fetch origin "$BASEBRANCH"
+          git checkout "$BASEBRANCH"
+          git fetch origin "$PRBRANCH"
+          git checkout "$PRBRANCH"
