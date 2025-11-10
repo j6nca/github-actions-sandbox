@@ -24,11 +24,13 @@ jobs:
 
       - name: Pint stuff
         run: |
-          git branch
-          echo "GITHUB_REF: $GITHUB_REF"
-          # must set these values for the git pull to work
-          git config --global user.email "pint@fakemail.com"
-          git config --global user.name "pint"
-          git config pull.rebase false
-          echo ">>> BASE BRANCH: ${{ github.event.repository.default_branch }}"
-          echo ">>> GITHUB HEAD REF: ${GITHUB_HEAD_REF}"
+          # pull request is not from fork
+          echo ">>> Running steps for PR from trunk (not fork)"
+          BASEBRANCH="$GITHUB_BASE_REF"
+          PRBRANCH="$GITHUB_HEAD_REF"
+          echo ">>> BASE BRANCH: $BASEBRANCH"
+          echo ">>> PR BRANCH: $PRBRANCH"
+          git fetch origin "$BASEBRANCH"
+          git checkout "$BASEBRANCH"
+          git fetch origin "$PRBRANCH"
+          git checkout "$PRBRANCH"
